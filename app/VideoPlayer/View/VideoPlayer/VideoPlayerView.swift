@@ -39,7 +39,9 @@ struct VideoPlayerView: View {
             CustomVideoPlayer(player: controller.player)
             
             HStack(spacing: 40) {
-                Button(action: {}) {
+                Button(action: {
+                    controller.playPrevious()
+                }) {
                     Image("previous")
                         .frame(width: skipButtonSize, height: skipButtonSize)
                         .background(
@@ -71,7 +73,9 @@ struct VideoPlayerView: View {
                     }
                 }
                 
-                Button(action: {}) {
+                Button(action: {
+                    controller.playNext()
+                }) {
                     Image("next")
                         .frame(width: skipButtonSize, height: skipButtonSize)
                         .background(

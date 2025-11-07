@@ -15,6 +15,7 @@ final class VideoPlayerController {
     var videos: [VideoModel] = []
     var player: AVPlayer?
     var isPlaying: Bool = false
+    var currentVideoIndex: Int = 0
     
     init() {
         Task {
@@ -41,8 +42,6 @@ final class VideoPlayerController {
         else if let mp4URL = URL(string: video.fullURL) {
             player = AVPlayer(url: mp4URL)
         }
-        
-        isPlaying = false
     }
     
     // Called when pausing or playing the video
@@ -56,6 +55,26 @@ final class VideoPlayerController {
         } else {
             player.play()
             isPlaying = true
+        }
+    }
+    
+    func playPrevious() {
+        guard !videos.isEmpty else { return }
+        
+        // do nothing if video if first video is being displayed
+        if currentVideoIndex > 0 {
+            currentVideoIndex -= 1
+            setPlayer(video: videos[currentVideoIndex])
+        }
+    }
+    
+    func playNext() {
+        guard !videos.isEmpty else { return }
+        
+        // do nothing if last video is being displayed
+        if currentVideoIndex < videos.count - 1 {
+            currentVideoIndex += 1
+            setPlayer(video: videos[currentVideoIndex])
         }
     }
 }
