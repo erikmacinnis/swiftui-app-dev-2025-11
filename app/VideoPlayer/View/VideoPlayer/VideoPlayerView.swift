@@ -29,8 +29,46 @@ struct VideoPlayerView: View {
     // handles all app logic and states
     @State private var controller = VideoPlayerController()
     
+    // previous and next button size
+    let skipButtonSize: CGFloat = 60
+    // pause and play button size
+    let playButtonSize: CGFloat = 80
+    
     var body: some View {
-        // Display video
-        CustomVideoPlayer(player: controller.player)
+        ZStack {
+            CustomVideoPlayer(player: controller.player)
+            
+            HStack(spacing: 40) {
+                Button(action: {}) {
+                    Image("previous")
+                        .frame(width: skipButtonSize, height: skipButtonSize)
+                        .background(
+                            Circle()
+                                .fill(Color.white)
+                                .overlay(Circle().stroke(Color.black))
+                        )
+                }
+                
+                Button(action: {}) {
+                    Image("play")
+                        .frame(width: playButtonSize, height: playButtonSize)
+                        .background(
+                            Circle()
+                                .fill(Color.white)
+                                .overlay(Circle().stroke(Color.black))
+                        )
+                }
+                
+                Button(action: {}) {
+                    Image("next")
+                        .frame(width: skipButtonSize, height: skipButtonSize)
+                        .background(
+                            Circle()
+                                .fill(Color.white)
+                                .overlay(Circle().stroke(Color.black))
+                        )
+                }
+            }
+        }
     }
 }
