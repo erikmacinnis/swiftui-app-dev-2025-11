@@ -98,7 +98,9 @@ struct VideoPlayerView: View {
             }
             .aspectRatio(16/9, contentMode: .fit)
             .onTapGesture {
-                controller.showsControls.toggle()
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    controller.showsControls.toggle()
+                }
             }
             
             // Todo: Polish
@@ -111,7 +113,7 @@ struct VideoPlayerView: View {
                             .fontWeight(.semibold)
                         
                         Text(video.author.name)
-                            .font(.subheadline)
+                            .font(.headline)
                         
                         // Markdown description
                         Markdown(video.description)

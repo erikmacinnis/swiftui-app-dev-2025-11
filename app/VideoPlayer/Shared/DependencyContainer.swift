@@ -17,8 +17,10 @@ final class DependencyContainer {
     private init() {
         // instantiating video repo
         self.videoRepo = VideoRepo(
-            videoService: MockVideoService()
-            // videoService: VideoService()
+            // my simulator is slow so the mock data helps run it on my device
+            // leaving it commented since it's useful for now
+            // videoService: MockVideoService()
+            videoService: VideoService()
         )
     }
 }
