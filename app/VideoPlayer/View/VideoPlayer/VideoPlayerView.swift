@@ -49,14 +49,26 @@ struct VideoPlayerView: View {
                         )
                 }
                 
-                Button(action: {}) {
-                    Image("play")
-                        .frame(width: playButtonSize, height: playButtonSize)
-                        .background(
-                            Circle()
-                                .fill(Color.white)
-                                .overlay(Circle().stroke(Color.black))
-                        )
+                Button(action: {
+                    controller.togglePlayPause()
+                }) {
+                    if controller.isPlaying {
+                        Image("pause")
+                            .frame(width: playButtonSize, height: playButtonSize)
+                            .background(
+                                Circle()
+                                    .fill(Color.white)
+                                    .overlay(Circle().stroke(Color.black))
+                            )
+                    } else {
+                        Image("play")
+                            .frame(width: playButtonSize, height: playButtonSize)
+                            .background(
+                                Circle()
+                                    .fill(Color.white)
+                                    .overlay(Circle().stroke(Color.black))
+                            )
+                    }
                 }
                 
                 Button(action: {}) {

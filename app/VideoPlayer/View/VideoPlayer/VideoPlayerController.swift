@@ -14,6 +14,7 @@ import AVKit
 final class VideoPlayerController {
     var videos: [VideoModel] = []
     var player: AVPlayer?
+    var isPlaying: Bool = false
     
     init() {
         Task {
@@ -39,6 +40,22 @@ final class VideoPlayerController {
         // fallback to mp4
         else if let mp4URL = URL(string: video.fullURL) {
             player = AVPlayer(url: mp4URL)
+        }
+        
+        isPlaying = false
+    }
+    
+    // Called when pausing or playing the video
+    // Updating the isPlaying state and player state
+    func togglePlayPause() {
+        guard let player = player else { return }
+        
+        if isPlaying {
+            player.pause()
+            isPlaying = false
+        } else {
+            player.play()
+            isPlaying = true
         }
     }
 }
