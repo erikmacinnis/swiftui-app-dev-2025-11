@@ -28,10 +28,14 @@ final class VideoPlayerController {
     }
     
     func getVideos() async {
-        videos = MockVideoData.sampleVideos
-        
-        if !videos.isEmpty {
-            setPlayer(video: videos[0])
+        do {
+            // using dependency container to fetch video
+            videos = try await DependencyContainer.shared.videoRepo.getVideos()
+            if !videos.isEmpty {
+                setPlayer(video: videos[0])
+            }
+        } catch {
+            print("Failed to fetch videos in VideoController: \(error)")
         }
     }
     
