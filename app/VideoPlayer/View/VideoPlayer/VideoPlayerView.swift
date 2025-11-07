@@ -1,0 +1,139 @@
+//
+//  VideoPlayerView.swift
+//  VideoPlayer
+//
+//  Created by Erik MacInnis on 2025-11-07.
+//
+
+import SwiftUI
+import AVKit
+import MarkdownUI
+
+// Displays the video player without the playback controls
+// Got code from here: https://stackoverflow.com/questions/65927459/playback-controls-in-swiftui
+struct CustomVideoPlayer: UIViewControllerRepresentable {
+    let player: AVPlayer?
+    
+    func makeUIViewController(context: Context) -> AVPlayerViewController {
+        let controller = AVPlayerViewController()
+        controller.showsPlaybackControls = false
+        controller.player = player
+        return controller
+    }
+    
+    func updateUIViewController(_ uiViewController: AVPlayerViewController, context: Context) {
+        uiViewController.player = player
+    }
+}
+
+struct VideoPlayerView: View {
+    // handles all app logic and states
+    @State private var controller = VideoPlayerController()
+    
+    // previous and next button size
+    let skipButtonSize: CGFloat = 60
+    // pause and play button size
+    let playButtonSize: CGFloat = 80
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            // Todo: Polish
+            Text("Video Player")
+                .font(.title)
+                .bold()
+                .padding(10)
+            
+            ZStack {
+                if controller.isLoading {
+                    ProgressView("Loading...")
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else if let error = controller.errorMessage {
+                    VStack {
+                        Text(error)
+                        Button("Retry") {
+                            Task { await controller.getVideos() }
+                        }
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
+                    CustomVideoPlayer(player: controller.player)
+                    
+                    if controller.showsControls {
+                        HStack(spacing: 40) {
+                            Button(action: {
+                                controller.playPrevious()
+                            }) {
+                                Image("previous")
+                                    .frame(width: skipButtonSize, height: skipButtonSize)
+                                    .background(
+                                        Circle()
+                                            .fill(Color.white)
+                                            .overlay(Circle().stroke(Color.black))
+                                    )
+                            }
+                            
+                            Button(action: {
+                                controller.togglePlayPause()
+                            }) {
+                                if controller.isPlaying {
+                                    Image("pause")
+                                        .frame(width: playButtonSize, height: playButtonSize)
+                                        .background(
+                                            Circle()
+                                                .fill(Color.white)
+                                                .overlay(Circle().stroke(Color.black))
+                                        )
+                                } else {
+                                    Image("play")
+                                        .frame(width: playButtonSize, height: playButtonSize)
+                                        .background(
+                                            Circle()
+                                                .fill(Color.white)
+                                                .overlay(Circle().stroke(Color.black))
+                                        )
+                                }
+                            }
+                            
+                            Button(action: {
+                                controller.playNext()
+                            }) {
+                                Image("next")
+                                    .frame(width: skipButtonSize, height: skipButtonSize)
+                                    .background(
+                                        Circle()
+                                            .fill(Color.white)
+                                            .overlay(Circle().stroke(Color.black))
+                                    )
+                            }
+                        }
+                    }
+                }
+            }
+            .aspectRatio(16/9, contentMode: .fit)
+            .onTapGesture {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    controller.showsControls.toggle()
+                }
+            }
+            
+            // Todo: Polish
+            // Scrollable section with title, artists and description
+            ScrollView {
+                if let video = controller.currentVideo {
+                    VStack(alignment: .leading, spacing: 16) {
+                        Text(video.title)
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                        
+                        Text(video.author.name)
+                            .font(.headline)
+                        
+                        // Markdown description
+                        Markdown(video.description)
+                    }
+                    .padding()
+                }
+            }
+        }
+    }
+}
