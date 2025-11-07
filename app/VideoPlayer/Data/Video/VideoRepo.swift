@@ -52,6 +52,9 @@ final class VideoRepo: VideoRepoProtocol {
                 $0.publishedAt > $1.publishedAt
             }
             
+            // update last fetched
+            lastFetchTime = Date.now
+            
             return sortedVideos
         } catch {
             // simply rethrowing error
