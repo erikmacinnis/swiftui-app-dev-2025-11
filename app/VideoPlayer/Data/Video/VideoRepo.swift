@@ -54,6 +54,8 @@ final class VideoRepo: VideoRepoProtocol {
             
             // update last fetched
             lastFetchTime = Date.now
+            // saving videos to memory
+            videos = sortedVideos
             
             return sortedVideos
         } catch {
