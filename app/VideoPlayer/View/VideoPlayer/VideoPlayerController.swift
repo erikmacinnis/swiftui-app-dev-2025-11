@@ -44,6 +44,14 @@ final class VideoPlayerController {
         else if let mp4URL = URL(string: video.fullURL) {
             player = AVPlayer(url: mp4URL)
         }
+        
+        guard let player = player else { return }
+        
+        // Playing the new video if the previous was already playing
+        if isPlaying {
+            player.play()
+            showsControls = false
+        }
     }
     
     // Called when pausing or playing the video
