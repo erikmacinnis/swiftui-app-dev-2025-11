@@ -16,6 +16,7 @@ final class VideoPlayerController {
     var player: AVPlayer?
     var isPlaying: Bool = false
     var currentVideoIndex: Int = 0
+    var currentVideo: VideoModel?
     // is showing buttons over video
     var showsControls = true
     
@@ -36,6 +37,8 @@ final class VideoPlayerController {
     
     // Creates the player with hlsURL and using mp4 as fallback
     func setPlayer(video: VideoModel) {
+        currentVideo = video
+        
         // try HLS first
         if let hlsURL = URL(string: video.hlsURL) {
             player = AVPlayer(url: hlsURL)
