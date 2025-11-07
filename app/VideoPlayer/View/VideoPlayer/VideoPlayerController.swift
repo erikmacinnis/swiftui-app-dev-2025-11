@@ -41,10 +41,16 @@ final class VideoPlayerController {
     
     // Creates the player with hlsURL and using mp4 as fallback
     func setPlayer(video: VideoModel) {
+        // cleaning up previous player
+        player?.pause()
+        player = nil
+        
+        // setting the current video
         currentVideo = video
         
         // try HLS first
         if let hlsURL = URL(string: video.hlsURL) {
+            
             player = AVPlayer(url: hlsURL)
         }
         // fallback to mp4
