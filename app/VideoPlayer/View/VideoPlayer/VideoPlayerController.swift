@@ -16,6 +16,8 @@ final class VideoPlayerController {
     var player: AVPlayer?
     var isPlaying: Bool = false
     var currentVideoIndex: Int = 0
+    // is showing buttons over video
+    var showsControls = true
     
     init() {
         Task {
@@ -55,6 +57,7 @@ final class VideoPlayerController {
         } else {
             player.play()
             isPlaying = true
+            showsControls = false
         }
     }
     
