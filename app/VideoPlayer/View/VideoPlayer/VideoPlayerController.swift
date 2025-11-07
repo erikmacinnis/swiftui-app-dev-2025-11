@@ -19,6 +19,8 @@ final class VideoPlayerController {
     var currentVideo: VideoModel?
     // is showing buttons over video
     var showsControls = true
+    var isLoading = true
+    var errorMessage: String?
     
     init() {
         Task {
@@ -27,14 +29,21 @@ final class VideoPlayerController {
         }
     }
     
+    // gets videos and always displays the first video
     func getVideos() async {
+        isLoading = true
+        errorMessage = nil
+        
         do {
-            // using dependency container to fetch video
             videos = try await DependencyContainer.shared.videoRepo.getVideos()
             if !videos.isEmpty {
+                // always displaying the first video
                 setPlayer(video: videos[0])
             }
+            isLoading = false
         } catch {
+            isLoading = false
+            errorMessage = "Failed to load videos"
             print("Failed to fetch videos in VideoController: \(error)")
         }
     }

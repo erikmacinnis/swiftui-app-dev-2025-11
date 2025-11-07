@@ -44,54 +44,67 @@ struct VideoPlayerView: View {
                 .padding(10)
             
             ZStack {
-                CustomVideoPlayer(player: controller.player)
-                
-                if controller.showsControls {
-                    HStack(spacing: 40) {
-                        Button(action: {
-                            controller.playPrevious()
-                        }) {
-                            Image("previous")
-                                .frame(width: skipButtonSize, height: skipButtonSize)
-                                .background(
-                                    Circle()
-                                        .fill(Color.white)
-                                        .overlay(Circle().stroke(Color.black))
-                                )
+                if controller.isLoading {
+                    ProgressView("Loading...")
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else if let error = controller.errorMessage {
+                    VStack {
+                        Text(error)
+                        Button("Retry") {
+                            Task { await controller.getVideos() }
                         }
-                        
-                        Button(action: {
-                            controller.togglePlayPause()
-                        }) {
-                            if controller.isPlaying {
-                                Image("pause")
-                                    .frame(width: playButtonSize, height: playButtonSize)
-                                    .background(
-                                        Circle()
-                                            .fill(Color.white)
-                                            .overlay(Circle().stroke(Color.black))
-                                    )
-                            } else {
-                                Image("play")
-                                    .frame(width: playButtonSize, height: playButtonSize)
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                } else {
+                    CustomVideoPlayer(player: controller.player)
+                    
+                    if controller.showsControls {
+                        HStack(spacing: 40) {
+                            Button(action: {
+                                controller.playPrevious()
+                            }) {
+                                Image("previous")
+                                    .frame(width: skipButtonSize, height: skipButtonSize)
                                     .background(
                                         Circle()
                                             .fill(Color.white)
                                             .overlay(Circle().stroke(Color.black))
                                     )
                             }
-                        }
-                        
-                        Button(action: {
-                            controller.playNext()
-                        }) {
-                            Image("next")
-                                .frame(width: skipButtonSize, height: skipButtonSize)
-                                .background(
-                                    Circle()
-                                        .fill(Color.white)
-                                        .overlay(Circle().stroke(Color.black))
-                                )
+                            
+                            Button(action: {
+                                controller.togglePlayPause()
+                            }) {
+                                if controller.isPlaying {
+                                    Image("pause")
+                                        .frame(width: playButtonSize, height: playButtonSize)
+                                        .background(
+                                            Circle()
+                                                .fill(Color.white)
+                                                .overlay(Circle().stroke(Color.black))
+                                        )
+                                } else {
+                                    Image("play")
+                                        .frame(width: playButtonSize, height: playButtonSize)
+                                        .background(
+                                            Circle()
+                                                .fill(Color.white)
+                                                .overlay(Circle().stroke(Color.black))
+                                        )
+                                }
+                            }
+                            
+                            Button(action: {
+                                controller.playNext()
+                            }) {
+                                Image("next")
+                                    .frame(width: skipButtonSize, height: skipButtonSize)
+                                    .background(
+                                        Circle()
+                                            .fill(Color.white)
+                                            .overlay(Circle().stroke(Color.black))
+                                    )
+                            }
                         }
                     }
                 }
