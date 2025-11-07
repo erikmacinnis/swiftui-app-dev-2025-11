@@ -96,7 +96,7 @@ struct VideoPlayerView: View {
                     }
                 }
             }
-            .frame(height: 300)
+            .aspectRatio(16/9, contentMode: .fit)
             .onTapGesture {
                 controller.showsControls.toggle()
             }
