@@ -7,6 +7,7 @@
 
 import SwiftUI
 import AVKit
+import MarkdownUI
 
 // Displays the video player without the playback controls
 // Got code from here: https://stackoverflow.com/questions/65927459/playback-controls-in-swiftui
@@ -36,7 +37,11 @@ struct VideoPlayerView: View {
     
     var body: some View {
         VStack(spacing: 0) {
+            // Todo: Polish
             Text("Video Player")
+                .font(.title)
+                .bold()
+                .padding(10)
             
             ZStack {
                 CustomVideoPlayer(player: controller.player)
@@ -96,11 +101,22 @@ struct VideoPlayerView: View {
                 controller.showsControls.toggle()
             }
             
+            // Todo: Polish
+            // Scrollable section with title, artists and description
             ScrollView {
                 if let video = controller.currentVideo {
                     VStack(alignment: .leading, spacing: 16) {
                         Text(video.title)
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                        
+                        Text(video.author.name)
+                            .font(.subheadline)
+                        
+                        // Markdown description
+                        Markdown(video.description)
                     }
+                    .padding()
                 }
             }
         }
